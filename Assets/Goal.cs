@@ -13,11 +13,15 @@ public class Goal : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (hasWon) {
+		if (hasWon && PickUpGenerator.numPickUps - PickUpGenerator.Score == 0) {
 			transform.Translate(0f, 0.1f, 0f);
 			if (transform.position.y > 15) {
 				Destroy(gameObject);
 			}
+		}
+
+		if (Input.GetAxis ("Jump") > 0.2f) {
+			GetComponent<Rigidbody> ().AddForce (new Vector3 (0, 40, 0));
 		}
 	}
 
@@ -25,6 +29,11 @@ public class Goal : MonoBehaviour {
 		if (other.name == "Goal") {
 			rb.isKinematic = true;
 			hasWon = true;
+		}
+
+		if (other.name == "Pickup") {
+			Destroy (other.gameObject);
+			PickUpGenerator.Score++;
 		}
 	}
 }
